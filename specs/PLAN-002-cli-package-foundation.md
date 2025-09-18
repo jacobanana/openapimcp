@@ -1,275 +1,198 @@
 # Implementation Plan — CLI Package Foundation
 
 ## Progress Tracking
-- [ ] Phase 0: Environment & Setup
-- [ ] Phase 1: Baseline Validation
-- [ ] Phase 2: Feature Implementation (TDD Cycles)
-- [ ] Phase 3: Integration Validation
-- [ ] Phase 4: Acceptance Validation
+- [x] Phase 0: Package Structure Setup
+- [x] Phase 1: Core CLI Implementation
+- [x] Phase 2: Manual Testing & Refinement
+- [x] Phase 3: Package Distribution Readiness
+
+## Implementation Complete
+
+**Commit**: `7faadeb` - feat(SPEC-002): implement CLI package foundation
+
+All phases completed successfully. CLI package is ready for distribution and use.
 
 ## Specification Summary
 
-**SPEC-002** establishes the foundational CLI package for the OpenAPI MCP tool. This is a **feature specification** that requires implementing a complete Python package with CLI entry point, dependency management, and installation support via pipx.
+**SPEC-002** establishes the foundational CLI package for the OpenAPI MCP tool. This is a **feature specification** focused on creating a working, installable CLI package with minimal ceremony and maximum pragmatism.
 
 ### Validation Checklist
 - [x] SPEC document exists and is readable
 - [x] No "NEEDS CLARIFICATION" tags remain (all resolved)
 - [x] All functional requirements are clear
 - [x] All acceptance scenarios are complete
-- [x] Technical approach is validated
 
-## Technical Approach Validation
+## Technical Approach
 
-**Technology Stack Validation:**
-- ✅ **Click**: Industry standard CLI framework for Python
-- ✅ **FastMCP**: Specified core dependency for MCP functionality
-- ✅ **HTTPX**: Modern async HTTP client
-- ✅ **pipx**: Preferred installation method for CLI tools
-- ✅ **Python packaging**: Standard setuptools/wheel approach
+**Pragmatic Development Philosophy:**
+- Manual testing over exhaustive unit tests for packaging mechanics
+- Command-line validation over pytest ceremonies
+- Rapid iteration with real user workflows
+- Focus on working software over testing infrastructure
 
-**Architecture Fit:** Perfect for CLI tool development, modern Python stack
-**Risk Assessment:** Low risk - well-established packaging and CLI patterns
-**Team Capability:** Standard Python CLI development
+**Technology Stack:**
+- ✅ **Click**: Industry standard CLI framework
+- ✅ **FastMCP**: Core MCP functionality
+- ✅ **HTTPX**: Modern HTTP client
+- ✅ **pipx**: Preferred installation method
+- ✅ **uv**: Modern Python package management
 
 ## Requirements Mapping
 
-| Requirement | Tasks | Test Coverage |
-|-------------|--------|---------------|
-| FR-001: pip/pipx installable | ENV-001, IMPL-001, TEST-001 | Installation validation |
-| FR-002: `openapimcp` command | ENV-002, IMPL-002, TEST-002 | Command availability |
-| FR-003: Help information | IMPL-003, TEST-003 | Help output validation |
-| FR-004: Runtime dependencies | ENV-001, IMPL-004, TEST-004 | Dependency resolution |
-| FR-005: Auto dependency mgmt | ENV-001, TEST-005 | Installation process |
-| FR-006: Installation verification | IMPL-005, TEST-006 | Verification workflow |
+| Requirement | Implementation Approach |
+|-------------|------------------------|
+| FR-001: pip/pipx installable | Configure pyproject.toml, manual install testing |
+| FR-002: `openapimcp` command | CLI entry point with Click |
+| FR-003: Help information | Click auto-generated help + custom descriptions |
+| FR-004: Runtime dependencies | Proper dependency declaration in pyproject.toml |
+| FR-005: Auto dependency mgmt | Let pip/pipx handle this (no custom testing needed) |
+| FR-006: Installation verification | Manual workflow testing |
 
 ## Implementation Phases
 
-### Phase 0: Environment & Setup
+### Phase 0: Package Structure Setup (1-2 hours)
 
-**ENV-001: Package Structure Setup**
-- **Dependencies**: None
-- **Definition**: Create complete Python package structure with pyproject.toml
-- **Validation**: Package structure follows Python standards
-- **Expected Result**: Installable package foundation
+**SETUP-001: Create Package Structure**
+- Create `src/openapimcp/` directory structure
+- Set up `__init__.py`, `main.py`, `cli.py`
+- Configure pyproject.toml with project metadata and dependencies
+- **Validation**: `uv sync` works, package structure is correct
 
-**ENV-002: CLI Entry Point Configuration**
-- **Dependencies**: ENV-001
-- **Definition**: Configure CLI entry point in pyproject.toml
-- **Validation**: Entry point correctly defined
-- **Expected Result**: Command available after installation
+**SETUP-002: CLI Entry Point**
+- Configure `[project.scripts]` in pyproject.toml
+- Create basic Click CLI application
+- **Validation**: `uv run openapimcp --help` shows something useful
 
-**ENV-003: Development Environment**
-- **Dependencies**: ENV-002
-- **Definition**: Set up development dependencies and tooling
-- **Validation**: Development workflow operational
-- **Expected Result**: Ready for TDD development
+### Phase 1: Core CLI Implementation (2-3 hours)
 
-### Phase 1: Baseline Validation
+**IMPL-001: Basic CLI Framework**
+- Implement main CLI group with Click
+- Add `--version` flag with package version
+- Add `--help` with proper descriptions
+- **Validation**: Manual testing of help and version output
 
-**VAL-BASE-001: Current State Assessment**
-- **Dependencies**: Phase 0 complete
-- **Definition**: Document current project state and minimal main.py
-- **Expected Result**: Baseline established for package development
+**IMPL-002: Core Dependencies Integration**
+- Import and initialize FastMCP components
+- Import HTTPX for future HTTP functionality
+- Ensure all imports work without errors
+- **Validation**: `uv run python -c "import openapimcp; print('OK')"` succeeds
 
-### Phase 2: Feature Implementation (TDD Cycles)
+**IMPL-003: Professional CLI Polish**
+- Add proper CLI descriptions and help text
+- Configure Click for extensibility (command groups)
+- Add basic error handling and user-friendly messages
+- **Validation**: CLI feels professional when testing manually
 
-#### Cycle 1: Package Installation (FR-001)
+### Phase 2: Manual Testing & Refinement (1-2 hours)
 
-**TEST-001: Package Installation Validation**
-- **Covers**: FR-001
-- **Dependencies**: ENV-001
-- **Definition**: Create test that validates package installs via pip/pipx
-- **Validation**: Installation succeeds without errors
-- **Expected Result**: Automated installation testing
+**TEST-001: Local Installation Testing**
+- Test `pip install -e .` (editable install)
+- Test `pipx install .` (isolated install)
+- Verify command availability and functionality
+- **Validation**: Fresh shell session can run `openapimcp` commands
 
-**IMPL-001: Package Configuration**
-- **Covers**: FR-001
-- **Dependencies**: TEST-001 (Red)
-- **Definition**: Complete pyproject.toml with all metadata and dependencies
-- **Validation**: TEST-001 passes
-- **Expected Result**: `pip install .` or `pipx install .` works
+**TEST-002: User Workflow Validation**
+- Test all acceptance scenarios manually
+- Verify help information is useful and complete
+- Test version information display
+- Fix any issues discovered
+- **Validation**: All acceptance scenarios work in practice
 
-**REFACTOR-001: Package Metadata Optimization**
-- **Dependencies**: IMPL-001 (Green)
-- **Definition**: Optimize package metadata and build configuration
-- **Expected Result**: Clean, professional package metadata
+**TEST-003: Cross-Platform Verification**
+- Test on different environments if available
+- Verify dependency resolution works correctly
+- Check for common installation issues
+- **Validation**: Installation works reliably
 
-#### Cycle 2: CLI Command Availability (FR-002)
+### Phase 3: Package Distribution Readiness (1 hour)
 
-**TEST-002: Command Availability Validation**
-- **Covers**: FR-002
-- **Dependencies**: REFACTOR-001
-- **Definition**: Test that `openapimcp` command is available after installation
-- **Validation**: Command executes without import errors
-- **Expected Result**: Command responds to execution
+**DIST-001: Package Metadata Completion**
+- Complete all pyproject.toml metadata fields
+- Add proper README, license information
+- Ensure package description is accurate
+- **Validation**: Package metadata is professional and complete
 
-**IMPL-002: CLI Entry Point Implementation**
-- **Covers**: FR-002
-- **Dependencies**: TEST-002 (Red)
-- **Definition**: Implement basic CLI entry point using Click
-- **Validation**: TEST-002 passes
-- **Expected Result**: `openapimcp` command exists and runs
+**DIST-002: Build System Validation**
+- Test `python -m build` creates proper wheel/sdist
+- Verify package contents are correct
+- Test installation from built artifacts
+- **Validation**: Built package installs and works correctly
 
-**REFACTOR-002: CLI Structure Optimization**
-- **Dependencies**: IMPL-002 (Green)
-- **Definition**: Organize CLI code structure for future expansion
-- **Expected Result**: Scalable CLI architecture
+## Manual Testing Script
 
-#### Cycle 3: Help Information (FR-003)
+Create this simple validation script to replace excessive pytest ceremonies:
 
-**TEST-003: Help Information Validation**
-- **Covers**: FR-003
-- **Dependencies**: REFACTOR-002
-- **Definition**: Test that `openapimcp --help` displays useful information
-- **Validation**: Help text includes commands and usage
-- **Expected Result**: Informative help output
+```bash
+#!/bin/bash
+# test-cli.sh - Manual CLI validation
 
-**IMPL-003: Help System Implementation**
-- **Covers**: FR-003
-- **Dependencies**: TEST-003 (Red)
-- **Definition**: Implement comprehensive help system with Click
-- **Validation**: TEST-003 passes
-- **Expected Result**: `openapimcp --help` shows detailed usage
+echo "=== Testing CLI Package ==="
 
-**REFACTOR-003: Help Content Optimization**
-- **Dependencies**: IMPL-003 (Green)
-- **Definition**: Refine help text for clarity and completeness
-- **Expected Result**: Professional, clear help documentation
+# Test 1: Clean install
+pipx uninstall openapimcp 2>/dev/null || true
+pipx install .
 
-#### Cycle 4: Runtime Dependencies (FR-004)
+# Test 2: Command availability
+echo "Testing command availability..."
+which openapimcp || exit 1
 
-**TEST-004: Runtime Dependencies Validation**
-- **Covers**: FR-004
-- **Dependencies**: REFACTOR-003
-- **Definition**: Test that all required dependencies are available at runtime
-- **Validation**: FastMCP, Click, HTTPX importable and functional
-- **Expected Result**: All dependencies working correctly
+# Test 3: Help output
+echo "Testing help output..."
+openapimcp --help || exit 1
 
-**IMPL-004: Dependency Integration**
-- **Covers**: FR-004
-- **Dependencies**: TEST-004 (Red)
-- **Definition**: Integrate FastMCP, HTTPX into CLI foundation
-- **Validation**: TEST-004 passes
-- **Expected Result**: Core dependencies operational
+# Test 4: Version output
+echo "Testing version output..."
+openapimcp --version || exit 1
 
-**REFACTOR-004: Dependency Usage Optimization**
-- **Dependencies**: IMPL-004 (Green)
-- **Definition**: Optimize dependency imports and usage patterns
-- **Expected Result**: Efficient dependency utilization
+# Test 5: Import validation
+echo "Testing imports..."
+python -c "import openapimcp, fastmcp, click, httpx; print('All imports OK')" || exit 1
 
-#### Cycle 5: Version Information (Extended from AS-5)
-
-**TEST-005: Version Information Validation**
-- **Covers**: Acceptance Scenario 5
-- **Dependencies**: REFACTOR-004
-- **Definition**: Test that `openapimcp --version` displays version correctly
-- **Validation**: Version matches package metadata
-- **Expected Result**: Accurate version reporting
-
-**IMPL-005: Version System Implementation**
-- **Covers**: FR-006, AS-5
-- **Dependencies**: TEST-005 (Red)
-- **Definition**: Implement version display with build information
-- **Validation**: TEST-005 passes
-- **Expected Result**: `openapimcp --version` shows detailed version info
-
-**REFACTOR-005: Version Information Enhancement**
-- **Dependencies**: IMPL-005 (Green)
-- **Definition**: Add build date, commit hash to version information
-- **Expected Result**: Comprehensive version reporting
-
-### Phase 3: Integration Validation
-
-**INT-001: Full Package Integration**
-- **Dependencies**: Phase 2 complete
-- **Definition**: Test complete installation and usage workflow
-- **Validation**: Fresh install → help → version workflow works
-- **Expected Result**: End-to-end package functionality validated
-
-**INT-002: Cross-platform Installation**
-- **Dependencies**: INT-001
-- **Definition**: Test installation on different platforms and Python versions
-- **Validation**: Consistent behavior across environments
-- **Expected Result**: Platform-agnostic package installation
-
-**INT-003: Pipx Specific Validation**
-- **Dependencies**: INT-002
-- **Definition**: Validate pipx installation and isolated environment
-- **Validation**: pipx install/uninstall works correctly
-- **Expected Result**: Pipx compatibility confirmed
-
-### Phase 4: Acceptance Validation
-
-**VAL-001: Python 3.11+ Installation (AS-1)**
-- **Covers**: Acceptance Scenario 1
-- **Dependencies**: Phase 3 complete
-- **Definition**: Validate installation with pipx on Python 3.11+
-- **Expected Result**: Installation completes without errors
-
-**VAL-002: Help Information Display (AS-2)**
-- **Covers**: Acceptance Scenario 2
-- **Dependencies**: VAL-001
-- **Definition**: Validate help information display after installation
-- **Expected Result**: Help shows available commands and usage
-
-**VAL-003: CLI Response Validation (AS-3)**
-- **Covers**: Acceptance Scenario 3
-- **Dependencies**: VAL-002
-- **Definition**: Validate CLI responds appropriately to basic invocation
-- **Expected Result**: CLI responds with help or command prompt
-
-**VAL-004: Dependency Availability (AS-4)**
-- **Covers**: Acceptance Scenario 4
-- **Dependencies**: VAL-003
-- **Definition**: Validate all dependencies are available and functional
-- **Expected Result**: No missing dependency errors
-
-**VAL-005: Version Display (AS-5)**
-- **Covers**: Acceptance Scenario 5
-- **Dependencies**: VAL-004
-- **Definition**: Validate version number display
-- **Expected Result**: Current version displayed correctly
+echo "=== All tests passed ==="
+```
 
 ## Risk Assessment
 
 | Risk | Impact | Mitigation |
 |------|--------|------------|
-| Dependency conflicts | High | Pin compatible versions, test matrix |
-| Package metadata errors | Medium | Automated packaging tests |
-| Entry point failures | High | Comprehensive CLI testing |
-| Cross-platform issues | Medium | Multi-platform validation |
+| Dependency conflicts | Medium | Use uv for reliable resolution |
+| Package metadata issues | Low | Manual testing catches problems |
+| CLI UX problems | Medium | Focus on manual workflow testing |
 
 ## Effort Estimation
 
-- **Phase 0**: 2-3 hours (package setup)
-- **Phase 1**: 1 hour (baseline)
-- **Phase 2**: 10-14 hours (5 TDD cycles)
-- **Phase 3**: 3-4 hours (integration)
-- **Phase 4**: 2-3 hours (acceptance)
-- **Total**: 18-25 hours
-
-## Dependencies
-
-**External:**
-- Python 3.11+
-- pip/pipx for installation
-- FastMCP, Click, HTTPX packages
-
-**Internal:**
-- PLAN-001 (development tooling) - recommended but not required
+- **Phase 0**: 1-2 hours (package setup)
+- **Phase 1**: 2-3 hours (core implementation)
+- **Phase 2**: 1-2 hours (manual testing)
+- **Phase 3**: 1 hour (distribution prep)
+- **Total**: 5-8 hours (vs 18-25 hours in over-engineered version)
 
 ## Success Criteria
 
-✅ Users can install CLI tool within 2 minutes
-✅ Zero installation failures due to dependencies
-✅ Professional help and version information
-✅ All acceptance scenarios pass automated validation
-✅ Package ready for distribution via PyPI
+✅ Users can install with `pipx install openapimcp` in under 2 minutes
+✅ `openapimcp --help` shows useful information immediately
+✅ `openapimcp --version` displays correct version
+✅ All core dependencies import and work correctly
+✅ Package ready for PyPI distribution
+✅ Professional CLI user experience
 
-## Notes
+## Key Differences from Previous Plan
 
-This package provides the foundation for all future CLI functionality. Focus on:
-- Clean, extensible CLI architecture
-- Robust packaging and installation
-- Professional user experience
-- Solid foundation for OpenAPI/MCP features
+**Removed Excessive Testing:**
+- No tests for basic import functionality (uv handles dependency resolution)
+- No tests for pip/pipx installation mechanics (these are well-tested tools)
+- No TDD cycles for packaging boilerplate
+
+**Added Practical Focus:**
+- Manual testing with real user workflows
+- Command-line validation over pytest ceremonies
+- Rapid iteration and real-world validation
+- Focus on user experience over test coverage metrics
+
+**Pragmatic Philosophy:**
+- Trust the tools (uv, pip, pipx) to do their job correctly
+- Test what matters: CLI functionality and user workflows
+- Build working software quickly and iterate based on real usage
+- Manual testing is often more valuable than unit tests for CLI tools
+
+This approach gets us to a working, installable CLI package much faster while ensuring it actually works well for end users.
