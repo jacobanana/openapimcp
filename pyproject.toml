@@ -56,6 +56,10 @@ testpaths = ["tests"]
 python_files = ["test_*.py", "*_test.py"]
 python_classes = ["Test*"]
 python_functions = ["test_*"]
+markers = [
+    "core: marks tests as essential for core development workflow",
+    "extended: marks tests as part of extended test suite (environment validation, comprehensive checks)"
+]
 
 [dependency-groups]
 dev = [
