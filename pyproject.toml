@@ -1,7 +1,63 @@
 [project]
 name = "openapimcp"
 version = "0.1.0"
-description = "Add your description here"
+description = "OpenAPI to MCP server CLI tool"
 readme = "README.md"
-requires-python = ">=3.12"
-dependencies = []
+requires-python = ">=3.11"
+dependencies = [
+    "fastmcp",
+    "click",
+    "httpx",
+]
+
+
+[tool.black]
+line-length = 88
+target-version = ["py311"]
+include = '\.pyi?$'
+extend-exclude = '''
+/(
+  # directories
+  \.eggs
+  | \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | build
+  | dist
+)/
+'''
+
+[tool.ruff]
+target-version = "py311"
+line-length = 88
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP", "SIM", "PERF", "N", "S"]
+ignore = ["E501", "N812", "N815"]
+fixable = ["ALL"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["S101", "S603", "S607"]
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = "-ra -q --strict-markers --strict-config"
+testpaths = ["tests"]
+python_files = ["test_*.py", "*_test.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+markers = [
+    "core: marks tests as essential for core development workflow",
+    "extended: marks tests as part of extended test suite (environment validation, comprehensive checks)"
+]
+
+[dependency-groups]
+dev = [
+    "black>=25.1.0",
+    "pre-commit>=4.3.0",
+    "pytest>=8.4.2",
+    "pytest-cov>=7.0.0",
+    "ruff>=0.13.0",
+]

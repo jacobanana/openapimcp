@@ -36,3 +36,10 @@ openapimcp describe --api https://www.example.com/openapi.json
 ```
 
 Prints a formatted human readable description of what the MCP tools will be.
+
+## Transports
+
+- STDIO
+- Streamable HTTP
+
+Transports should be passed to the `serve` command as `--transport` and use STDIO by default.
