@@ -1,36 +1,16 @@
 """Tests for pytest framework functionality."""
 
-import subprocess
-import sys
-from pathlib import Path
+from .test_utils import assert_tool_version, run_command
 
 
 def test_pytest_command_available():
     """Test that pytest command is available and working."""
-    result = subprocess.run(
-        [sys.executable, "-m", "pytest", "--version"],
-        capture_output=True,
-        text=True,
-    )
-
-    assert result.returncode == 0, f"Pytest command failed: {result.stderr}"
-    assert (
-        "pytest" in result.stdout.lower()
-    ), f"Unexpected pytest version output: {result.stdout}"
+    assert_tool_version("pytest", ["uv", "run", "pytest", "--version"])
 
 
 def test_pytest_can_discover_tests():
     """Test that pytest can discover and collect tests."""
-    project_root = Path(__file__).parent.parent
-
-    result = subprocess.run(
-        [sys.executable, "-m", "pytest", "--collect-only", "-q"],
-        capture_output=True,
-        text=True,
-        cwd=project_root,
-    )
-
-    assert result.returncode == 0, f"Pytest collection failed: {result.stderr}"
+    result = run_command(["uv", "run", "pytest", "--collect-only", "-q"])
     # Should find multiple test functions
     assert (
         "test session starts" in result.stdout or result.stdout.count("test") >= 1
@@ -39,17 +19,7 @@ def test_pytest_can_discover_tests():
 
 def test_pytest_configuration_valid():
     """Test that pytest configuration is valid."""
-    project_root = Path(__file__).parent.parent
-
-    # Run pytest with config validation
-    result = subprocess.run(
-        [sys.executable, "-m", "pytest", "--help"],
-        capture_output=True,
-        text=True,
-        cwd=project_root,
-    )
-
-    assert result.returncode == 0, f"Pytest config validation failed: {result.stderr}"
+    run_command(["uv", "run", "pytest", "--help"])
 
 
 def test_basic_pytest_functionality():
@@ -62,28 +32,18 @@ def test_basic_pytest_functionality():
 
 def test_pytest_with_coverage():
     """Test that pytest can run with coverage reporting."""
-    project_root = Path(__file__).parent.parent
-
     # Try to run a simple test with coverage
-    result = subprocess.run(
+    result = run_command(
         [
-            sys.executable,
-            "-m",
+            "uv",
+            "run",
             "pytest",
             "tests/test_pytest_framework.py::test_basic_pytest_functionality",
             "--cov=.",
             "--cov-report=term-missing",
             "-v",
-        ],
-        capture_output=True,
-        text=True,
-        cwd=project_root,
+        ]
     )
-
-    # Coverage might not be 100% but pytest should run successfully
-    assert (
-        result.returncode == 0
-    ), f"Pytest with coverage failed: {result.stderr}\nstdout: {result.stdout}"
     assert (
         "PASSED" in result.stdout or "passed" in result.stdout
     ), f"Test didn't pass with coverage: {result.stdout}"

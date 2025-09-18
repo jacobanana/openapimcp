@@ -19,31 +19,31 @@
 ### Code Formatting
 ```bash
 # Check formatting
-uv run python -m black --check .
+uv run black --check .
 
 # Apply formatting
-uv run python -m black .
+uv run black .
 ```
 
 ### Code Linting
 ```bash
 # Check linting
-uv run python -m ruff check .
+uv run ruff check .
 
 # Fix auto-fixable issues
-uv run python -m ruff check --fix .
+uv run ruff check --fix .
 ```
 
 ### Testing
 ```bash
 # Run all tests
-uv run python -m pytest
+uv run pytest
 
 # Run with coverage
-uv run python -m pytest --cov=. --cov-report=term-missing
+uv run pytest --cov=. --cov-report=term-missing
 
 # Run specific test file
-uv run python -m pytest tests/test_formatting.py -v
+uv run pytest tests/test_formatting.py -v
 ```
 
 ### Dependency Management
@@ -61,16 +61,16 @@ uv add --dev <package-name>
 ### Pre-commit Hooks (Optional)
 ```bash
 # Install pre-commit hooks
-uv run python -m pre_commit install
+uv run pre-commit install
 
 # Run hooks manually
-uv run python -m pre_commit run --all-files
+uv run pre-commit run --all-files
 ```
 
 ### All-in-One Quality Check
 ```bash
 # Run all quality checks
-uv run python -m black --check . && uv run python -m ruff check . && uv run python -m pytest
+uv run black --check . && uv run ruff check . && uv run pytest
 ```
 
 ## Code Style Guidelines
