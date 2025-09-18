@@ -3,12 +3,49 @@ name = "openapimcp"
 version = "0.1.0"
 description = "OpenAPI to MCP server CLI tool"
 readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [
+    {name = "OpenAPI MCP Team", email = "team@openapimcp.dev"}
+]
+maintainers = [
+    {name = "OpenAPI MCP Team", email = "team@openapimcp.dev"}
+]
+keywords = ["openapi", "mcp", "cli", "model-context-protocol", "ai", "tools"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Utilities",
+    "Typing :: Typed",
+]
 requires-python = ">=3.11"
 dependencies = [
     "fastmcp",
     "click",
     "httpx",
 ]
+
+[project.urls]
+Homepage = "https://github.com/jacobanana/openapimcp"
+Repository = "https://github.com/jacobanana/openapimcp"
+Documentation = "https://github.com/jacobanana/openapimcp#readme"
+"Bug Tracker" = "https://github.com/jacobanana/openapimcp/issues"
+
+[project.scripts]
+openapimcp = "openapimcp.main:main"
+
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
 
 
 [tool.black]
@@ -60,4 +97,5 @@ dev = [
     "pytest>=8.4.2",
     "pytest-cov>=7.0.0",
     "ruff>=0.13.0",
+    "build>=1.0.0",
 ]
