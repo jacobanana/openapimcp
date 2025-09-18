@@ -10,14 +10,6 @@ dependencies = [
     "httpx",
 ]
 
-[project.optional-dependencies]
-dev = [
-    "black",
-    "ruff",
-    "pytest",
-    "pytest-cov",
-    "pre-commit",
-]
 
 [tool.black]
 line-length = 88
